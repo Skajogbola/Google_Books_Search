@@ -14,16 +14,17 @@ class Home extends Component {
     message: "Search For A Book To Begin!"
   };
 
-  componentDidMount() {
-    this.getBooks();
-  }
-
   handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({
       [name]: value
     });
   };
+
+  handleFormSubmit = event => {
+    event.preventDefault();
+    this.getBooks();
+  }
 
   getBooks = () => {
     API.getBooks(this.state.q)
