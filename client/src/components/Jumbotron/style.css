@@ -1,0 +1,10 @@
+.jumbotron{
+  background-image: url("http://www.tottenvillehistory.com/images/joomgallery/originals/gallery_2/gallery_collections_9/library_20170326_1954826885.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 300px; 
+  width: 100%;
+  padding-top: 10; 
+  text-align: center
+}
