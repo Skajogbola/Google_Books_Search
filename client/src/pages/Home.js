@@ -28,11 +28,35 @@ class Home extends Component {
 
   getBooks = () => {
     API.getBooks(this.state.q)
-      .then(res =>
-        this.setState({
-          books: res.data
+      .then(res => {
+        if (res.data.items === "error") {
+          throw new Error(res.data.items);
+      }
+      else {
+        // store response in a array
+        let results = res.data
+        console.log(results)
+        //map through the array 
+        let  newResults = results.map(result => {
+            //store each book information in a new object 
+            result = {
+                key: result.id,
+                id: result.id,
+                title: result.volumeInfo.title,
+                author: result.volumeInfo.authors,
+                description: result.volumeInfo.description,
+                image: result.volumeInfo.imageLinks.thumbnail,
+                link: result.volumeInfo.infoLink
+            }
+            return result;
         })
-      )
+        // reset the sate of the empty books array to the new arrays of objects with properties geting back from the response
+        this.setState({ books: results, error: "" })
+    }
+        // this.setState({
+        //   books: res.data
+        // })
+    })
       .catch(() =>
         this.setState({
           books: [],
