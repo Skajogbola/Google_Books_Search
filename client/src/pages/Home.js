@@ -31,32 +31,29 @@ class Home extends Component {
       .then(res => {
         if (res.data.items === "error") {
           throw new Error(res.data.items);
-      }
-      else {
-        // store response in a array
-        let results = res.data
-        console.log(results)
-        //map through the array 
-        let  newResults = results.map(result => {
+        }
+        else {
+          // store response in a array
+          let results = res.data
+          console.log(results)
+          //map through the array 
+          let newResults = results.map(result => {
             //store each book information in a new object 
             result = {
-                key: result.id,
-                id: result.id,
-                title: result.volumeInfo.title,
-                author: result.volumeInfo.authors,
-                description: result.volumeInfo.description,
-                image: result.volumeInfo.imageLinks.thumbnail,
-                link: result.volumeInfo.infoLink
+              key: result.id,
+              id: result.id,
+              title: result.volumeInfo.title,
+              author: result.volumeInfo.authors,
+              description: result.volumeInfo.description,
+              image: result.volumeInfo.imageLinks.thumbnail,
+              link: result.volumeInfo.infoLink
             }
             return result;
-        })
-        // reset the sate of the empty books array to the new arrays of objects with properties geting back from the response
-        this.setState({ books: results, error: "" })
-    }
-        // this.setState({
-        //   books: res.data
-        // })
-    })
+          })
+          // reset the sate of the empty books array to the new arrays of objects with properties geting back from the response
+          this.setState({ books: results, error: "" })
+        }
+      })
       .catch(() =>
         this.setState({
           books: [],
@@ -65,19 +62,39 @@ class Home extends Component {
       );
   };
 
-  handleBookSave = id => {
-    const book = this.state.books.find(book => book.id === id);
+  handleBookSave = event => {
+    console.log(event)
+    // event.preventDefault();
+    console.log(this.state.books)
+    let savedBooks = this.state.books.filter(book => book.id === event)
+    savedBooks = savedBooks[0];
+    API.saveBook(savedBooks)
+    // API.saveBook({
+    //       googleId: book.id,
+    //       title: book.volumeInfo.title,
+    //       subtitle: book.volumeInfo.subtitle,
+    //       link: book.volumeInfo.infoLink,
+    //       authors: book.volumeInfo.authors,
+    //       description: book.volumeInfo.description,
+    //       image: book.volumeInfo.imageLinks.thumbnail
+    //     })
+      .then(this.setState({ message: alert("Your book is saved") }))
+      .catch(err => console.log(err))
+  }
 
-    API.saveBook({
-      googleId: book.id,
-      title: book.volumeInfo.title,
-      subtitle: book.volumeInfo.subtitle,
-      link: book.volumeInfo.infoLink,
-      authors: book.volumeInfo.authors,
-      description: book.volumeInfo.description,
-      image: book.volumeInfo.imageLinks.thumbnail
-    }).then(() => this.getBooks());
-  };
+  // handleBookSave = id => {
+  //   const book = this.state.books.find(book => book.id === id);
+
+  //   API.saveBook({
+  //     googleId: book.id,
+  //     title: book.volumeInfo.title,
+  //     subtitle: book.volumeInfo.subtitle,
+  //     link: book.volumeInfo.infoLink,
+  //     authors: book.volumeInfo.authors,
+  //     description: book.volumeInfo.description,
+  //     image: book.volumeInfo.imageLinks.thumbnail
+  //   }).then(() => this.getSavedBooks());
+  // };
 
   render() {
     return (
@@ -112,12 +129,13 @@ class Home extends Component {
                       title={book.volumeInfo.title}
                       subtitle={book.volumeInfo.subtitle}
                       link={book.volumeInfo.infoLink}
-                      authors={book.volumeInfo.authors.join(", ")}
+                      authors={book.volumeInfo.authors}
                       description={book.volumeInfo.description}
                       image={book.volumeInfo.imageLinks.thumbnail}
                       Button={() => (
                         <button
                           onClick={() => this.handleBookSave(book.id)}
+                          // this.handleBookSave(book.id)}
                           className="btn btn-primary ml-2"
                         >
                           Save
@@ -127,8 +145,8 @@ class Home extends Component {
                   ))}
                 </List>
               ) : (
-                <h2 className="text-center">{this.state.message}</h2>
-              )}
+                  <h2 className="text-center">{this.state.message}</h2>
+                )}
             </Card>
           </Col>
         </Row>

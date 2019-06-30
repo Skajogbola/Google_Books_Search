@@ -8,7 +8,7 @@ import { List } from "../components/List";
 
 class Saved extends Component {
   state = {
-    books: []
+    savedBooks: []
   };
 
   componentDidMount() {
@@ -19,7 +19,7 @@ class Saved extends Component {
     API.getSavedBooks()
       .then(res =>
         this.setState({
-          books: res.data
+          savedBooks: res.data
         })
       )
       .catch(err => console.log(err));
@@ -35,25 +35,25 @@ class Saved extends Component {
         <Row>
           <Col size="md-12">
             <Jumbotron>
-              <h1 className="text-center">
+              <h1 className="text-center text-white">
                 <strong>(React) Google Books Search</strong>
               </h1>
-              <h2 className="text-center">Search for and Save Books of Interest.</h2>
+              <h2 className="text-center text-white">Search for and Save Books of Interest.</h2>
             </Jumbotron>
           </Col>
         </Row>
         <Row>
           <Col size="md-12">
-            <Card title="Saved Books" icon="download">
-              {this.state.books.length ? (
+            <Card title="Saved Books">
+              {this.state.savedBooks.length === 0 ? (
                 <List>
-                  {this.state.books.map(book => (
+                  {this.state.savedBooks.map(book => (
                     <Book
                       key={book._id}
                       title={book.title}
                       subtitle={book.subtitle}
                       link={book.link}
-                      authors={book.authors.join(", ")}
+                      authors={book.authors}
                       description={book.description}
                       image={book.image}
                       Button={() => (
