@@ -63,21 +63,20 @@ class Home extends Component {
   };
 
   handleBookSave = event => {
-    console.log(event)
+    // console.log(event)
     // event.preventDefault();
-    console.log(this.state.books)
+    // console.log('hiiii', this.state.books)
     let savedBooks = this.state.books.filter(book => book.id === event)
     savedBooks = savedBooks[0];
-    API.saveBook(savedBooks)
-    // API.saveBook({
-    //       googleId: book.id,
-    //       title: book.volumeInfo.title,
-    //       subtitle: book.volumeInfo.subtitle,
-    //       link: book.volumeInfo.infoLink,
-    //       authors: book.volumeInfo.authors,
-    //       description: book.volumeInfo.description,
-    //       image: book.volumeInfo.imageLinks.thumbnail
-    //     })
+    const bookToSave = savedBooks.volumeInfo;
+    bookToSave.link = bookToSave.infoLink;
+    bookToSave.googleId = savedBooks.id;
+    bookToSave.title = savedBooks.volumeInfo.title;
+    bookToSave.subtitle = savedBooks.volumeInfo.subtitle;
+    bookToSave.author = savedBooks.volumeInfo.authors.join(", ");
+    bookToSave.description = savedBooks.volumeInfo.description;
+    bookToSave.image = savedBooks.volumeInfo.imageLinks.thumbnail;
+    API.saveBook(bookToSave)
       .then(this.setState({ message: alert("Your book is saved") }))
       .catch(err => console.log(err))
   }
@@ -129,13 +128,13 @@ class Home extends Component {
                       title={book.volumeInfo.title}
                       subtitle={book.volumeInfo.subtitle}
                       link={book.volumeInfo.infoLink}
-                      authors={book.volumeInfo.authors}
+                      // authors={book.volumeInfo.authors}
+                      authors={typeof book.volumeInfo.authors === 'object' && book.volumeInfo.authors.length ? book.volumeInfo.authors : ''}
                       description={book.volumeInfo.description}
                       image={book.volumeInfo.imageLinks.thumbnail}
                       Button={() => (
                         <button
                           onClick={() => this.handleBookSave(book.id)}
-                          // this.handleBookSave(book.id)}
                           className="btn btn-primary ml-2"
                         >
                           Save

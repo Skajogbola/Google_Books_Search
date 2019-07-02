@@ -17,10 +17,13 @@ class Saved extends Component {
 
   getSavedBooks = () => {
     API.getSavedBooks()
-      .then(res =>
-        this.setState({
+      .then(res => {
+        console.log(res.data)
+         this.setState({
           savedBooks: res.data
         })
+        
+      }
       )
       .catch(err => console.log(err));
   };
@@ -45,7 +48,7 @@ class Saved extends Component {
         <Row>
           <Col size="md-12">
             <Card title="Saved Books">
-              {this.state.savedBooks.length === 0 ? (
+              {this.state.savedBooks.length !== 0 ? (
                 <List>
                   {this.state.savedBooks.map(book => (
                     <Book
@@ -68,8 +71,8 @@ class Saved extends Component {
                   ))}
                 </List>
               ) : (
-                <h2 className="text-center">No Saved Books</h2>
-              )}
+                  <h2 className="text-center">No Saved Books</h2>
+                )}
             </Card>
           </Col>
         </Row>
