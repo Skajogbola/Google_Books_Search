@@ -73,7 +73,7 @@ class Home extends Component {
     bookToSave.googleId = savedBooks.id;
     bookToSave.title = savedBooks.volumeInfo.title;
     bookToSave.subtitle = savedBooks.volumeInfo.subtitle;
-    bookToSave.author = savedBooks.volumeInfo.authors.join(", ");
+    bookToSave.author = typeof savedBooks.volumeInfo.authors === 'object' && savedBooks.volumeInfo.authors.length ? savedBooks.volumeInfo.authors.join(", ") : '';
     bookToSave.description = savedBooks.volumeInfo.description;
     bookToSave.image = savedBooks.volumeInfo.imageLinks.thumbnail;
     API.saveBook(bookToSave)
