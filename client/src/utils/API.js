@@ -7,7 +7,7 @@ export default {
   },
   // Gets all books
   getSavedBooks: function () {
-    return axios.get("http://localhost:3001/api/books");
+    return axios.get(process.env.NODE_ENV === "production" ? "/api/books" : "http://localhost:3001/api/books"  );
   },
   // Gets the book with the given id
   getBook: function (id) {
